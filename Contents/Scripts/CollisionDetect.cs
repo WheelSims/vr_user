@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CollisionDetect : MonoBehaviour
@@ -19,10 +20,11 @@ public class CollisionDetect : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-      
-           friction=0.1;
+      if (collision.gameObject.tag=="Obstacle" || collision.gameObject.tag=="Human")
+      {
+           friction=0.15;
            collisionfound=true;
-            
+            }
         }
     
 
