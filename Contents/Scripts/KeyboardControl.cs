@@ -11,7 +11,7 @@ public class KeyboardControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         // React to keyboard
         float linearSpeed = 0f;  // default
@@ -22,9 +22,9 @@ public class KeyboardControl : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow)) angularSpeed = 60f;  // deg/s
 
         // Rotate around y - axis
-        transform.Rotate(0, angularSpeed * Time.fixedDeltaTime, 0);
+        transform.Rotate(0, angularSpeed * Time.deltaTime, 0);
 
         // Move forward / backward
-        transform.Translate(0, 0, linearSpeed * Time.fixedDeltaTime);
+        transform.Translate(0, 0, linearSpeed * Time.deltaTime);
     }
 }
