@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Collections;
 
-public class UDPSignalReceiver : MonoBehaviour
+public class UDPSignalReceiver2 : MonoBehaviour
 {
     private int port = 25100; // Port to listen on
     private UdpClient udpClient;
@@ -13,6 +13,8 @@ public class UDPSignalReceiver : MonoBehaviour
 
     public double linearVelocity=0;
     public double angularVelocity=0;
+    private double currentincrementindex;
+    private double lastincrementindex;
 
     void Start()
     {
@@ -29,12 +31,13 @@ public class UDPSignalReceiver : MonoBehaviour
           IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
           byte[] receivedBytes = udpClient.EndReceive(ar, ref remoteEndPoint);
 
-    // Convert byte data to Velocity
+        // Convert byte data to Velocity
+        currentincrementindex = System.BitConverter.ToDouble(receivedBytes, 0);
+        angularVelocity = System.BitConverter.ToDouble(receivedBytes, 8);
+        linearVelocity = System.BitConverter.ToDouble(receivedBytes,16);
     
-    angularVelocity = System.BitConverter.ToDouble(receivedBytes, 0);
-    linearVelocity = System.BitConverter.ToDouble(receivedBytes, 8);
-    // Try to avoid jitter
-            double thresholdlinear = 0.1;
+        // Try to avoid jitter
+        double thresholdlinear = 0.1;
             double thresholdangular = 0.1;
 
             if (linearVelocity > -thresholdlinear && linearVelocity < thresholdlinear)
@@ -58,15 +61,33 @@ public class UDPSignalReceiver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
+        if (currentincrementindex != lastincrementindex)
+        {
+                      
+            // Update the speed of the cube
 
-           // Rotate around y - axis
-        transform.Rotate(0, (float)(angularVelocity * Time.fixedDeltaTime*(-180/Mathf.PI)), 0,Space.World);
+            // Rotate around y - axis
+            transform.Rotate(0, (float)(angularVelocity * Time.DeltaTime*(-180/Mathf.PI)), 0,Space.World);
 
-        // Move forward / backward
-        transform.Translate(0, 0, (float)(linearVelocity * Time.fixedDeltaTime));
+            // Move forward / backward
+           transform.Translate(0, 0, (float)(linearVelocity * Time.DeltaTime));
+
+            lastincrementindex = currentincrementindex;
+        }
+        else
+            {
+                // Make the speed of the cube zero
+
+                // Rotate around y - axis
+                transform.Rotate(0, 0, 0, Space.World);
+
+             // Move forward / backward
+            transform.Translate(0, 0,0);
+            lastincrementindex = currentincrementindex;
+            }
     }
-
+        
+  
     private void OnDestroy()
     {
         udpClient.Close();
