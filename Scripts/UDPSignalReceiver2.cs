@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Collections;
+using dbox;
 
 public class UDPSignalReceiver2 : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class UDPSignalReceiver2 : MonoBehaviour
 
     public double linearVelocity=0;
     public double angularVelocity=0;
-    private double currentincrementindex;
-    private double lastincrementindex;
+    public double currentincrementindex;
+    public double lastincrementindex;
 
     void Start()
     {
@@ -67,14 +68,15 @@ public class UDPSignalReceiver2 : MonoBehaviour
             // Update the speed of the cube
 
             // Rotate around y - axis
-            transform.Rotate(0, (float)(angularVelocity * Time.DeltaTime*(-180/Mathf.PI)), 0,Space.World);
+            transform.Rotate(0, (float)(angularVelocity * Time.fixedDeltaTime*(-180/Mathf.PI)), 0,Space.World);
 
             // Move forward / backward
-           transform.Translate(0, 0, (float)(linearVelocity * Time.DeltaTime));
+           transform.Translate(0, 0, (float)(linearVelocity * Time.fixedDeltaTime));
+           
 
             lastincrementindex = currentincrementindex;
         }
-        else
+        if (currentincrementindex == lastincrementindex)
             {
                 // Make the speed of the cube zero
 
@@ -83,6 +85,9 @@ public class UDPSignalReceiver2 : MonoBehaviour
 
              // Move forward / backward
             transform.Translate(0, 0,0);
+              // stop DBox
+            
+
             lastincrementindex = currentincrementindex;
             }
     }

@@ -10,13 +10,14 @@ public class UDPSignalSender2 : MonoBehaviour
     private int port = 25000; // Port to send the data
 
      public CollisionDetect collisiondetect;
-     public bool hardwareenable = 1;
+     public double hardwareenable = 0;
 
     private UdpClient udpClient;
 
     void Start()
     {
         udpClient = new UdpClient(25000);
+        hardwareenable = 1;
         SendData();
         Debug.Log("Start sending data ");
     }
@@ -29,29 +30,31 @@ public class UDPSignalSender2 : MonoBehaviour
     void SendData()
     {
         // Serialize Data
-        byte[] data = new byte[16]; // One Float (8Bytes) and two Boolean Data (4*2Bytes)
+        byte[] data = new byte[20]; // One Float (8*2Bytes) and one Boolean Data (4Bytes)
         System.BitConverter.GetBytes(hardwareenable).CopyTo(data, 0);
-        System.BitConverter.GetBytes(collisiondetect.friction).CopyTo(data, 4);
-        System.BitConverter.GetBytes(collisiondetect.collisionfound).CopyTo(data, 12);
+        System.BitConverter.GetBytes(collisiondetect.friction).CopyTo(data, 8);
+        System.BitConverter.GetBytes(collisiondetect.collisionfound).CopyTo(data, 16);
         Debug.Log("Data ready ");
         
 
-        //// Send data
-        //udpClient.Send(data, data.Length, ipAddress, port);
-        //Debug.Log("Sent friction data: " + collisiondetect.friction);
+       // Send data
+        udpClient.Send(data, data.Length, ipAddress, port);
+        Debug.Log("Sent friction data: " + collisiondetect.friction);
          
-        // Debug.Log("Sent collision data: " + collisiondetect.collisionfound);
-        //Debug.Log("Sent Hardware Enable: " + hardwareenable);
+         Debug.Log("Sent collision data: " + collisiondetect.collisionfound);
+        Debug.Log("Sent Hardware Enable: " + hardwareenable);
     }
 
-    void OnDestroy()
-    {
-        udpClient.Close();
-    }
+   
 
     void OnApplicationQuit()
     {
-       public bool hardwareenable = 0;
+      hardwareenable = 0;
        SendData();
+    }
+
+     void OnDestroy()
+    {
+        udpClient.Close();
     }
 }
