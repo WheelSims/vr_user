@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Collections;
+using TMPro;
 
 public class UDPSignalReceiver : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class UDPSignalReceiver : MonoBehaviour
     public double angularVelocity=0;
     private double currentincrementindex;
     private double lastincrementindex;
+    public TMP_Text speedText;
 
     void Start()
     {
@@ -89,6 +91,8 @@ public class UDPSignalReceiver : MonoBehaviour
 
             lastincrementindex = currentincrementindex;
             }
+            
+             speedText.SetText(linearVelocity.ToString("0.00")+" m/s");
     }
         
   

@@ -22,7 +22,7 @@ public class CollisionDetect : MonoBehaviour
     {
       if (collision.gameObject.tag=="Obstacle" || collision.gameObject.tag=="Human")
       {
-           friction=0.15;
+           friction=0.25;
            collisionfound=true;
             }
         }
