@@ -16,6 +16,7 @@ public class UDPSignalReceiver : MonoBehaviour
     public double angularVelocity=0;
     private double currentincrementindex;
     private double lastincrementindex;
+    private double emergencyStop;
     public TMP_Text speedText;
 
     void Start()
@@ -37,6 +38,7 @@ public class UDPSignalReceiver : MonoBehaviour
         currentincrementindex = System.BitConverter.ToDouble(receivedBytes, 0);
         angularVelocity = System.BitConverter.ToDouble(receivedBytes, 8);
         linearVelocity = System.BitConverter.ToDouble(receivedBytes,16);
+        emergencyStop= System.BitConverter.ToDouble(receivedBytes,24);
     
         // Try to avoid jitter
         double thresholdlinear = 0.1;
@@ -48,7 +50,7 @@ public class UDPSignalReceiver : MonoBehaviour
             if (angularVelocity > -thresholdangular && angularVelocity < thresholdangular)
                 angularVelocity = 0.0;
 
-
+         Debug.Log("Emergency Stop " + emergencyStop);
 
 
         // Debug.Log("Received linear velocity data: " + linearVelocity+"Received angular velocity data: " + angularVelocity);
@@ -93,6 +95,13 @@ public class UDPSignalReceiver : MonoBehaviour
             }
             
              speedText.SetText(linearVelocity.ToString("0.00")+" m/s");
+
+             if (emergencyStop==1)
+             {
+             //Application.Quit();
+             UnityEditor.EditorApplication.isPlaying = false;
+             }
+
     }
         
   
