@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 
-public class UDPSignalSender : MonoBehaviour
+public class UDPSignalSender2 : MonoBehaviour
 
 {
     private string ipAddress = "192.168.0.200"; // IP address of the receiver
@@ -14,12 +14,19 @@ public class UDPSignalSender : MonoBehaviour
 
      public double wholeMass=96;
 
+    public double wheelDistance = 0.5325;
+
+    public double modeControl = 0;
+
     private UdpClient udpClient;
 
-      double previousFriction;
+
+    double previousFriction;
     bool previousCollisionFound;
     double previousWholeMass;
     double previousHardwareEnable;
+    double previousWheelDistance;
+    double previousModeControl;
 
     void Start()
     {
@@ -37,33 +44,38 @@ public class UDPSignalSender : MonoBehaviour
     void SendData()
     {
         // Serialize Data
-        byte[] data = new byte[28]; // One Float (8*3Bytes) and one Boolean Data (4Bytes)
+        byte[] data = new byte[44]; // 5 double (5*8 Bytes) and one Boolean Data (4Bytes)
         System.BitConverter.GetBytes(hardwareEnable).CopyTo(data, 0);
         System.BitConverter.GetBytes(collisiondetect.friction).CopyTo(data, 8);
         System.BitConverter.GetBytes(collisiondetect.collisionfound).CopyTo(data, 16);
         System.BitConverter.GetBytes(wholeMass).CopyTo(data, 20);
+        System.BitConverter.GetBytes(wheelDistance).CopyTo(data, 28);
+        System.BitConverter.GetBytes(modeControl).CopyTo(data, 36);
         Debug.Log("Data ready ");
-        
- if (previousFriction != collisiondetect.friction ||
+
+        // Check if data has changed
+        if (previousFriction != collisiondetect.friction ||
             previousCollisionFound != collisiondetect.collisionfound ||
             previousWholeMass != wholeMass ||
-            previousHardwareEnable != hardwareEnable)
+            previousHardwareEnable != hardwareEnable ||
+            previousWheelDistance != wheelDistance ||
+            previousModeControl != modeControl)
         {
-       // Send data
-        udpClient.Send(data, data.Length, ipAddress, port);
-        Debug.Log("Sent friction data: " + collisiondetect.friction);
-         
-         Debug.Log("Sent collision data: " + collisiondetect.collisionfound);
-        Debug.Log("Sent Hardware Enable: " + hardwareEnable);
+            // Send data
+            udpClient.Send(data, data.Length, ipAddress, port);
+            Debug.Log("Sent Hardware Enable: " + hardwareEnable);
 
-         // Update previous data
+            // Update previous data
             previousFriction = collisiondetect.friction;
             previousCollisionFound = collisiondetect.collisionfound;
             previousWholeMass = wholeMass;
             previousHardwareEnable = hardwareEnable;
-           
+            previousWheelDistance = wheelDistance;
+            previousModeControl = modeControl;
         }
     }
+  
+    
 
    
 
