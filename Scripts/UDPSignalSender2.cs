@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UDPSignalSender2 : MonoBehaviour
 
@@ -16,7 +17,9 @@ public class UDPSignalSender2 : MonoBehaviour
 
     public double wheelDistance = 0.5325;
 
-    public double modeControl = 0;
+    public double modeControl;
+
+    public double targetReach=0;
 
     private UdpClient udpClient;
 
@@ -27,13 +30,27 @@ public class UDPSignalSender2 : MonoBehaviour
     double previousHardwareEnable;
     double previousWheelDistance;
     double previousModeControl;
+    double previousTargetReach;
 
     void Start()
     {
         udpClient = new UdpClient(25000);
         hardwareEnable = 1;
+       
+        // Check the active scene and set mode accordingly
+        string activeSceneName = SceneManager.GetActiveScene().name;
+        if (activeSceneName == "IRGLM_Froll_Measurment")
+        {
+            modeControl = 0;
+        }
+        else
+        {
+            modeControl = 1;
+        }
+
         SendData();
         Debug.Log("Start sending data ");
+
     }
 
     // Update is called once per frame
@@ -44,13 +61,14 @@ public class UDPSignalSender2 : MonoBehaviour
     void SendData()
     {
         // Serialize Data
-        byte[] data = new byte[44]; // 5 double (5*8 Bytes) and one Boolean Data (4Bytes)
+        byte[] data = new byte[52]; // 6 double (6*8 Bytes) and one Boolean Data (4Bytes)
         System.BitConverter.GetBytes(hardwareEnable).CopyTo(data, 0);
         System.BitConverter.GetBytes(collisiondetect.friction).CopyTo(data, 8);
         System.BitConverter.GetBytes(collisiondetect.collisionfound).CopyTo(data, 16);
         System.BitConverter.GetBytes(wholeMass).CopyTo(data, 20);
         System.BitConverter.GetBytes(wheelDistance).CopyTo(data, 28);
         System.BitConverter.GetBytes(modeControl).CopyTo(data, 36);
+        System.BitConverter.GetBytes(targetReach).CopyTo(data, 44);
         Debug.Log("Data ready ");
 
         // Check if data has changed
@@ -59,7 +77,8 @@ public class UDPSignalSender2 : MonoBehaviour
             previousWholeMass != wholeMass ||
             previousHardwareEnable != hardwareEnable ||
             previousWheelDistance != wheelDistance ||
-            previousModeControl != modeControl)
+            previousModeControl != modeControl ||
+            previousTargetReach != targetReach)
         {
             // Send data
             udpClient.Send(data, data.Length, ipAddress, port);
@@ -72,17 +91,26 @@ public class UDPSignalSender2 : MonoBehaviour
             previousHardwareEnable = hardwareEnable;
             previousWheelDistance = wheelDistance;
             previousModeControl = modeControl;
+            previousTargetReach = targetReach;
         }
     }
-  
-    
 
-   
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Target")
+        {
+
+            targetReach = 1;
+        }
+    }
+
 
     void OnApplicationQuit()
     {
       hardwareEnable = 0;
-       SendData();
+        targetReach = 0;
+        SendData();
     }
 
      void OnDestroy()

@@ -20,7 +20,7 @@ public class CollisionDetect : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-      if (collision.gameObject.tag=="Obstacle" || collision.gameObject.tag=="Human")
+      if (collision.gameObject.tag=="Obstacle" || collision.gameObject.tag=="Human" || collision.gameObject.tag == "Target")
       {
            friction=0.25;
            collisionfound=true;
