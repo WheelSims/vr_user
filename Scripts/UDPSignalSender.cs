@@ -75,6 +75,24 @@ public class UDPSignalSender : MonoBehaviour
 
      void OnDestroy()
     {
-        udpClient.Close();
+                  CloseUDPClient();
     }
+
+    void CloseUDPClient()
+     {
+        if (udpClient!=null)
+        {
+            try
+            {
+               
+                udpClient.Close();
+                udpClient.Dispose();
+                udpClient=null;
+            }
+            catch (SocketException ex)
+            {
+                 Debug.LogError("Error closing UDP Client:"+ ex.Message);
+            }
+        }
+     }
 }

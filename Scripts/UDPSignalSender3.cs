@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UDPSignalSender2 : MonoBehaviour
+public class UDPSignalSender3 : MonoBehaviour
 
 {
     private string ipAddress = "192.168.0.200"; // IP address of the receiver
@@ -21,7 +21,7 @@ public class UDPSignalSender2 : MonoBehaviour
 
     public double targetReach=0;
 
-   
+    public double fRollSimulator=2.2;
 
     private UdpClient udpClient;
 
@@ -33,7 +33,7 @@ public class UDPSignalSender2 : MonoBehaviour
     double previousWheelDistance;
     double previousModeControl;
     double previousTargetReach;
-  
+    double previousFRollSimulator;
 
     void Start()
     {
@@ -69,7 +69,7 @@ public class UDPSignalSender2 : MonoBehaviour
     void SendData()
     {
         // Serialize Data
-        byte[] data = new byte[52]; // 6 double (6*8 Bytes) and one Boolean Data (4Bytes)
+        byte[] data = new byte[60]; // 6 double (7*8 Bytes) and one Boolean Data (4Bytes)
         System.BitConverter.GetBytes(hardwareEnable).CopyTo(data, 0);
         System.BitConverter.GetBytes(collisiondetect.friction).CopyTo(data, 8);
         System.BitConverter.GetBytes(collisiondetect.collisionfound).CopyTo(data, 16);
@@ -77,6 +77,7 @@ public class UDPSignalSender2 : MonoBehaviour
         System.BitConverter.GetBytes(wheelDistance).CopyTo(data, 28);
         System.BitConverter.GetBytes(modeControl).CopyTo(data, 36);
         System.BitConverter.GetBytes(targetReach).CopyTo(data, 44);
+        System.BitConverter.GetBytes(fRollSimulator).CopyTo(data, 52);
         Debug.Log("Data ready ");
 
         // Check if data has changed
@@ -86,7 +87,8 @@ public class UDPSignalSender2 : MonoBehaviour
             previousHardwareEnable != hardwareEnable ||
             previousWheelDistance != wheelDistance ||
             previousModeControl != modeControl ||
-            previousTargetReach != targetReach)
+            previousTargetReach != targetReach ||
+            previousFRollSimulator != fRollSimulator)
         {
             // Send data
             udpClient.Send(data, data.Length, ipAddress, port);
@@ -100,6 +102,7 @@ public class UDPSignalSender2 : MonoBehaviour
             previousWheelDistance = wheelDistance;
             previousModeControl = modeControl;
             previousTargetReach = targetReach;
+            previousFRollSimulator = fRollSimulator;
         }
     }
 
