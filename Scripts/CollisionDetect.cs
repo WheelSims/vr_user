@@ -8,13 +8,15 @@ public class CollisionDetect : MonoBehaviour
 {
    private Rigidbody cubeRigidbody;
 
-    public double friction=0.0113;
+    public double defaultFriction = 0.0113;
+    public double friction;
     public bool collisionfound=false;
   // public UDPSignalSender udpSignalSender;
    
 
     void Start()
     {
+        friction = defaultFriction;
         cubeRigidbody = GetComponent<Rigidbody>();
     }
 
@@ -30,7 +32,7 @@ public class CollisionDetect : MonoBehaviour
 
      void OnCollisionExit(Collision collisiondone)
     {
-         friction=0.0113;
+        friction = defaultFriction;
            collisionfound=false;
     }
     }
