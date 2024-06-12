@@ -750,6 +750,7 @@ GameObject:
   - component: {fileID: 6308447591221430753}
   - component: {fileID: 4770700236540533023}
   - component: {fileID: 4857901631311082911}
+  - component: {fileID: 4015957970629605508}
   m_Layer: 0
   m_Name: UserWheelchair
   m_TagString: Untagged
@@ -875,7 +876,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6619014675203426412}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0c5a809395e3124ab84ffd296eb74ed, type: 3}
   m_Name: 
@@ -909,7 +910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisiondetect: {fileID: 6308447591221430753}
   hardwareEnable: 0
-  wholeMass: 96
+  wholeMass: 93.8
 --- !u!114 &6308447591221430753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -922,6 +923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cdb10632a3c948c99cd373620d2bbff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultFriction: 0.0113
   friction: 0.0113
   collisionfound: 0
 --- !u!114 &4770700236540533023
@@ -956,11 +958,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisiondetect: {fileID: 6308447591221430753}
   hardwareEnable: 0
-  wholeMass: 96
+  wholeMass: 93.8
   wheelDistance: 0.5325
   modeControl: 0
   targetReach: 0
-  fRollSimulator: 2.2
+  fRollSimulator: 0
+--- !u!114 &4015957970629605508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6619014675203426412}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d03aaae26a5eefc48b42d64781f7e3fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisiondetect: {fileID: 6308447591221430753}
+  hardwareEnable: 0
+  wholeMass: 96
+  wheelDistance: 0.5325
+  modeControl: 0
+  uDPsignalreceiver: {fileID: 7122109346785620360}
 --- !u!1 &6626980519191407961
 GameObject:
   m_ObjectHideFlags: 0
