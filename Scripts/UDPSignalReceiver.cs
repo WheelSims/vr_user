@@ -18,6 +18,7 @@ public class UDPSignalReceiver : MonoBehaviour
     private double lastincrementindex;
     private double emergencyStop;
     public TMP_Text speedText;
+    
 
     void Start()
     {
@@ -40,15 +41,7 @@ public class UDPSignalReceiver : MonoBehaviour
         linearVelocity = System.BitConverter.ToDouble(receivedBytes,16);
         emergencyStop= System.BitConverter.ToDouble(receivedBytes,24);
     
-        // Try to avoid jitter
-        double thresholdlinear = 0.1;
-            double thresholdangular = 0.1;
-
-            if (linearVelocity > -thresholdlinear && linearVelocity < thresholdlinear)
-                linearVelocity = 0.0;
-
-            if (angularVelocity > -thresholdangular && angularVelocity < thresholdangular)
-                angularVelocity = 0.0;
+     
 
          Debug.Log("Emergency Stop " + emergencyStop);
 
@@ -107,24 +100,8 @@ public class UDPSignalReceiver : MonoBehaviour
   
     private void OnDestroy()
     {
-                CloseUDPClient();
+                udpClient.Close();
     }
 
-    void CloseUDPClient()
-     {
-        if (udpClient!=null)
-        {
-            try
-            {
-               
-                udpClient.Close();
-                udpClient.Dispose();
-                udpClient=null;
-            }
-            catch (SocketException ex)
-            {
-                 Debug.LogError("Error closing UDP Client:"+ ex.Message);
-            }
-        }
-     }
+    
 }
