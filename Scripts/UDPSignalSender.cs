@@ -13,6 +13,7 @@ public class UDPSignalSender : MonoBehaviour
      public double hardwareEnable = 0;
 
      public double wholeMass=96;
+    public double wheelDistance = 0.5325;
 
     private UdpClient udpClient;
 
@@ -20,6 +21,7 @@ public class UDPSignalSender : MonoBehaviour
     bool previousCollisionFound;
     double previousWholeMass;
     double previousHardwareEnable;
+    double previousWheelDistance;
 
     void Start()
     {
@@ -37,17 +39,19 @@ public class UDPSignalSender : MonoBehaviour
     void SendData()
     {
         // Serialize Data
-        byte[] data = new byte[28]; // One Float (8*3Bytes) and one Boolean Data (4Bytes)
+        byte[] data = new byte[36]; // One Float (8*4Bytes) and one Boolean Data (4Bytes)
         System.BitConverter.GetBytes(hardwareEnable).CopyTo(data, 0);
         System.BitConverter.GetBytes(collisiondetect.friction).CopyTo(data, 8);
         System.BitConverter.GetBytes(collisiondetect.collisionfound).CopyTo(data, 16);
         System.BitConverter.GetBytes(wholeMass).CopyTo(data, 20);
+        System.BitConverter.GetBytes(wheelDistance).CopyTo(data, 28);
         Debug.Log("Data ready ");
         
  if (previousFriction != collisiondetect.friction ||
             previousCollisionFound != collisiondetect.collisionfound ||
             previousWholeMass != wholeMass ||
-            previousHardwareEnable != hardwareEnable)
+            previousHardwareEnable != hardwareEnable ||
+            previousWheelDistance != wheelDistance)
         {
        // Send data
         udpClient.Send(data, data.Length, ipAddress, port);
@@ -61,7 +65,8 @@ public class UDPSignalSender : MonoBehaviour
             previousCollisionFound = collisiondetect.collisionfound;
             previousWholeMass = wholeMass;
             previousHardwareEnable = hardwareEnable;
-           
+            previousWheelDistance = wheelDistance;
+
         }
     }
 

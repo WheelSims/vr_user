@@ -40,10 +40,18 @@ public class UDPSignalReceiver : MonoBehaviour
         angularVelocity = System.BitConverter.ToDouble(receivedBytes, 8);
         linearVelocity = System.BitConverter.ToDouble(receivedBytes,16);
         emergencyStop= System.BitConverter.ToDouble(receivedBytes,24);
-    
-     
 
-         Debug.Log("Emergency Stop " + emergencyStop);
+        // Try to avoid jitter
+        double thresholdlinear = 0.02;
+        double thresholdangular = 0.01;
+
+        if (linearVelocity > -thresholdlinear && linearVelocity < thresholdlinear)
+            linearVelocity = 0.0;
+
+        if (angularVelocity > -thresholdangular && angularVelocity < thresholdangular)
+            angularVelocity = 0.0;
+
+        Debug.Log("Emergency Stop " + emergencyStop);
 
 
         // Debug.Log("Received linear velocity data: " + linearVelocity+"Received angular velocity data: " + angularVelocity);

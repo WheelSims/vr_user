@@ -17,7 +17,7 @@ public class UDPSignalSenderDelayCheck : MonoBehaviour
 
     public double wheelDistance = 0.5325;
 
-    public double modeControl;
+ 
 
      public  UDPSignalReceiver uDPsignalreceiver;
    
@@ -32,7 +32,6 @@ public class UDPSignalSenderDelayCheck : MonoBehaviour
     double previousWholeMass;
     double previousHardwareEnable;
     double previousWheelDistance;
-    double previousModeControl;
     double previousLinearVelocity;
   
 
@@ -41,16 +40,7 @@ public class UDPSignalSenderDelayCheck : MonoBehaviour
         udpClient = new UdpClient(25000);
         hardwareEnable = 1;
        
-        // Check the active scene and set mode accordingly
-        string activeSceneName = SceneManager.GetActiveScene().name;
-        if (activeSceneName == "IRGLM_Froll_Measurment")
-        {
-            modeControl = 0;
-        }
-        else
-        {
-            modeControl = 1;
-        }
+    
 
         SendData();
         Debug.Log("Start sending data ");
@@ -66,14 +56,13 @@ public class UDPSignalSenderDelayCheck : MonoBehaviour
     void SendData()
     {
         // Serialize Data
-        byte[] data = new byte[52]; // 6 double (6*8 Bytes) and one Boolean Data (4Bytes)
+        byte[] data = new byte[44]; // 5 double (5*8 Bytes) and one Boolean Data (4Bytes)
         System.BitConverter.GetBytes(hardwareEnable).CopyTo(data, 0);
         System.BitConverter.GetBytes(collisiondetect.friction).CopyTo(data, 8);
         System.BitConverter.GetBytes(collisiondetect.collisionfound).CopyTo(data, 16);
         System.BitConverter.GetBytes(wholeMass).CopyTo(data, 20);
         System.BitConverter.GetBytes(wheelDistance).CopyTo(data, 28);
-        System.BitConverter.GetBytes(modeControl).CopyTo(data, 36);
-        System.BitConverter.GetBytes(uDPsignalreceiver.linearVelocity).CopyTo(data, 44);
+        System.BitConverter.GetBytes(uDPsignalreceiver.linearVelocity).CopyTo(data, 36);
         Debug.Log("Data ready ");
 
         // Check if data has changed
@@ -82,7 +71,6 @@ public class UDPSignalSenderDelayCheck : MonoBehaviour
             previousWholeMass != wholeMass ||
             previousHardwareEnable != hardwareEnable ||
             previousWheelDistance != wheelDistance ||
-            previousModeControl != modeControl ||
             previousLinearVelocity != uDPsignalreceiver.linearVelocity)
         {
             // Send data
@@ -95,7 +83,6 @@ public class UDPSignalSenderDelayCheck : MonoBehaviour
             previousWholeMass = wholeMass;
             previousHardwareEnable = hardwareEnable;
             previousWheelDistance = wheelDistance;
-            previousModeControl = modeControl;
             previousLinearVelocity = uDPsignalreceiver.linearVelocity;
         }
     }
@@ -107,29 +94,14 @@ public class UDPSignalSenderDelayCheck : MonoBehaviour
     void OnApplicationQuit()
     {
       hardwareEnable = 0;
-        
+
         SendData();
     }
 
-     void OnDestroy()
+    void OnDestroy()
     {
-             CloseUDPClient();
+        udpClient.Close();
     }
 
-    void CloseUDPClient()
-     {
-        if (udpClient!=null)
-        {
-            try
-            {
-                    udpClient.Close();
-                udpClient.Dispose();
-                udpClient=null;
-            }
-            catch (SocketException ex)
-            {
-                 Debug.LogError("Error closing UDP Client:"+ ex.Message);
-            }
-        }
-    }
+
 }
