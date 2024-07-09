@@ -748,7 +748,6 @@ GameObject:
   - component: {fileID: 5926613796609377445}
   - component: {fileID: 2706814333452573236}
   - component: {fileID: 8567359068225701768}
-  - component: {fileID: 7290066145323434979}
   m_Layer: 0
   m_Name: UserWheelchair
   m_TagString: Untagged
@@ -923,25 +922,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisiondetect: {fileID: 5926613796609377445}
   hardwareEnable: 0
-  wholeMass: 96
-  wheelDistance: 0.5325
---- !u!114 &7290066145323434979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6619014675203426412}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d03aaae26a5eefc48b42d64781f7e3fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collisiondetect: {fileID: 5926613796609377445}
-  hardwareEnable: 0
-  wholeMass: 96
-  wheelDistance: 0.5325
-  uDPsignalreceiver: {fileID: 2706814333452573236}
+  wholeMass: 94
+  wheelDistance: 0.6
 --- !u!1 &6626980519191407961
 GameObject:
   m_ObjectHideFlags: 0

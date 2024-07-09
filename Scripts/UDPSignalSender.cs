@@ -12,8 +12,8 @@ public class UDPSignalSender : MonoBehaviour
      public CollisionDetect collisiondetect;
      public double hardwareEnable = 0;
 
-     public double wholeMass=96;
-    public double wheelDistance = 0.5325;
+     public double wholeMass=94;
+    public double wheelDistance = 0.60;
 
     private UdpClient udpClient;
 
