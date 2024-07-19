@@ -14,6 +14,7 @@ public class UDPSignalSender : MonoBehaviour
 
      public double wholeMass=94;
     public double wheelDistance = 0.60;
+    public bool forceReset = false;
 
     private UdpClient udpClient;
 
@@ -22,11 +23,13 @@ public class UDPSignalSender : MonoBehaviour
     double previousWholeMass;
     double previousHardwareEnable;
     double previousWheelDistance;
+    bool previousForceReset;
 
     void Start()
     {
         udpClient = new UdpClient(25000);
         hardwareEnable = 1;
+        forceReset = true;
         SendData();
         Debug.Log("Start sending data ");
     }
@@ -39,19 +42,21 @@ public class UDPSignalSender : MonoBehaviour
     void SendData()
     {
         // Serialize Data
-        byte[] data = new byte[36]; // One Float (8*4Bytes) and one Boolean Data (4Bytes)
+        byte[] data = new byte[40]; // One Float (8*4Bytes) and two Boolean Data (8Bytes)
         System.BitConverter.GetBytes(hardwareEnable).CopyTo(data, 0);
         System.BitConverter.GetBytes(collisiondetect.friction).CopyTo(data, 8);
         System.BitConverter.GetBytes(collisiondetect.collisionfound).CopyTo(data, 16);
         System.BitConverter.GetBytes(wholeMass).CopyTo(data, 20);
         System.BitConverter.GetBytes(wheelDistance).CopyTo(data, 28);
+        System.BitConverter.GetBytes(forceReset).CopyTo(data, 36);
         Debug.Log("Data ready ");
         
  if (previousFriction != collisiondetect.friction ||
             previousCollisionFound != collisiondetect.collisionfound ||
             previousWholeMass != wholeMass ||
             previousHardwareEnable != hardwareEnable ||
-            previousWheelDistance != wheelDistance)
+            previousWheelDistance != wheelDistance ||
+            previousForceReset != forceReset)
         {
        // Send data
         udpClient.Send(data, data.Length, ipAddress, port);
@@ -66,6 +71,8 @@ public class UDPSignalSender : MonoBehaviour
             previousWholeMass = wholeMass;
             previousHardwareEnable = hardwareEnable;
             previousWheelDistance = wheelDistance;
+            previousForceReset = forceReset;
+
 
         }
     }
@@ -75,6 +82,7 @@ public class UDPSignalSender : MonoBehaviour
     void OnApplicationQuit()
     {
       hardwareEnable = 0;
+      forceReset = false;
        SendData();
     }
 

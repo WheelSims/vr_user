@@ -747,7 +747,7 @@ GameObject:
   - component: {fileID: 59093766011498579}
   - component: {fileID: 5926613796609377445}
   - component: {fileID: 2706814333452573236}
-  - component: {fileID: 8567359068225701768}
+  - component: {fileID: 4129780965631422683}
   m_Layer: 0
   m_Name: UserWheelchair
   m_TagString: Untagged
@@ -890,7 +890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cdb10632a3c948c99cd373620d2bbff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultFriction: 0.0113
+  defaultFriction: 0.02
   friction: 0
   collisionfound: 0
 --- !u!114 &2706814333452573236
@@ -908,7 +908,7 @@ MonoBehaviour:
   linearVelocity: 0
   angularVelocity: 0
   speedText: {fileID: 8628512158639313165}
---- !u!114 &8567359068225701768
+--- !u!114 &4129780965631422683
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -924,6 +924,7 @@ MonoBehaviour:
   hardwareEnable: 0
   wholeMass: 94
   wheelDistance: 0.6
+  forceReset: 0
 --- !u!1 &6626980519191407961
 GameObject:
   m_ObjectHideFlags: 0

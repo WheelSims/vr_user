@@ -8,7 +8,7 @@ public class CollisionDetect : MonoBehaviour
 {
    private Rigidbody cubeRigidbody;
 
-    public double defaultFriction = 0.0113;
+    public double defaultFriction = 0.02;
     public double friction;
     public bool collisionfound=false;
   // public UDPSignalSender udpSignalSender;
